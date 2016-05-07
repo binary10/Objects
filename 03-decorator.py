@@ -43,7 +43,11 @@ class Mocha(CondimentDecorator):
 
 
 # Test Classes
-class Test_Order():
+class Test():
+	def __init__(self):
+		self.log = logging.getLogger('.'.join([__name__, type(self).__name__]))
+
+class Test_Order(Test):
 	def run(self):
 		# Build a new coffee order
 		bev = HouseBlend()
@@ -51,7 +55,7 @@ class Test_Order():
 		bev = Mocha(bev)
 		
 		# Log the cost
-		logging.info(bev.cost())
+		self.log.debug(bev.cost())
 
 
 #Configure Logger
@@ -59,7 +63,7 @@ l = logging.getLogger(__name__)
 h = logging.StreamHandler(sys.stdout)
 f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 h.setFormatter(f)
-l.setLevel(logging.INFO)
+l.setLevel(logging.DEBUG)
 l.addHandler(h)
 
 l.info('test')
