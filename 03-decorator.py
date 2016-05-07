@@ -20,13 +20,12 @@ class HouseBlend(Beverage):
 
 # Create Condiments
 class CondimentDecorator(Beverage):
-	pass
-
-class Milk(CondimentDecorator):
 	def __init__(self,beverage):
 		super().__init__()
 		self.beverage = beverage
 
+
+class Milk(CondimentDecorator):
 	def get_description(self):
 		return self.beverage.get_description() + '\n' + 'I\'m Milk'
 		
@@ -35,11 +34,6 @@ class Milk(CondimentDecorator):
 		return self.beverage.cost() + 0.75
 		
 class Mocha(CondimentDecorator):
-	def __init__(self,beverage):
-		super().__init__()
-		self.beverage = beverage
-		self.description = 'I\'m Mocha\n'
-	
 	def get_description(self):
 		return self.beverage.get_description() + '\n' + 'I\'m Mocha'
 
@@ -60,7 +54,7 @@ class Test_Order():
 		logging.info(bev.cost())
 
 
-# Configure Logger
+#Configure Logger
 l = logging.getLogger(__name__)
 h = logging.StreamHandler(sys.stdout)
 f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
