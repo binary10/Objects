@@ -4,13 +4,11 @@ import sys
 # Create Beverages
 class Beverage():
 	def __init__(self):
-		self.log = logging.getLogger(__name__ + ':' + type(self).__name__)
-		self.log.addHandler(logging.StreamHandler())
-		self.log.setLevel(logging.INFO)
+		self.log = logging.getLogger('.'.join([__name__, type(self).__name__]))
 
 class HouseBlend(Beverage):
 	def __init__(self):
-		super().__init__()
+		super().__init__()		# Use logger set up in abstract base class
 	
 	def get_description(self):
 		return 'I\'m a House Blend'
@@ -22,10 +20,7 @@ class HouseBlend(Beverage):
 
 # Create Condiments
 class CondimentDecorator(Beverage):
-	def __init__(self):
-		self.log = logging.getLogger(__name__ + ':' + type(self).__name__)
-		self.log.addHandler(logging.StreamHandler())
-		self.log.setLevel(logging.INFO)
+	pass
 
 class Milk(CondimentDecorator):
 	def __init__(self,beverage):
@@ -65,6 +60,13 @@ class Test_Order():
 		logging.info(bev.cost())
 
 
-#if __name__=='__main__':
-logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+# Configure Logger
+l = logging.getLogger(__name__)
+h = logging.StreamHandler(sys.stdout)
+f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+h.setFormatter(f)
+l.setLevel(logging.INFO)
+l.addHandler(h)
+
+l.info('test')
 Test_Order().run()
