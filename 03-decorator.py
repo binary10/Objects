@@ -47,6 +47,7 @@ class Test():
 	def __init__(self):
 		self.log = logging.getLogger('.'.join([__name__, type(self).__name__]))
 
+
 class Test_Order(Test):
 	def run(self):
 		# Build a new coffee order
@@ -56,6 +57,8 @@ class Test_Order(Test):
 		
 		# Log the cost
 		self.log.debug(bev.cost())
+		self.log.debug(bev.get_description())
+
 
 
 #Configure Logger
@@ -66,5 +69,4 @@ h.setFormatter(f)
 l.setLevel(logging.DEBUG)
 l.addHandler(h)
 
-l.info('test')
 Test_Order().run()
