@@ -10,22 +10,22 @@ Based on Head First Design Patterns book implementation in Java.
 class State:
     def __init__(self, gumballMachine):
         self.gumballMachine = None
-  
+
     def insertQuarter(self):
         pass
- 
+
     def ejectQuarter(self):
         pass
- 
+
     def turnCrank(self):
        pass
 
     def dispense(self):
        pass
-    
+
     def refill(self):
         pass
- 
+
     def toString(self):
         pass
 
@@ -34,24 +34,24 @@ class State:
 class HasQuarterState(State):
     def __init__(self, gumballMachine):
         self.gumballMachine = gumballMachine
- 
+
     def insertQuarter(self):
         print("You can't insert another quarter")
- 
+
     def ejectQuarter(self):
         print("Quarter returned")
         self.gumballMachine.setState(self.gumballMachine.getNoQuarterState())
- 
+
     def turnCrank(self):
         print("You turned...")
         self.gumballMachine.setState(self.gumballMachine.getSoldState())
 
     def dispense(self):
         print("No gumball dispensed")
-    
+
     def refill(self):
         pass
- 
+
     def __str__(self):
        return "waiting for turn of crank"
 
@@ -84,22 +84,22 @@ class SoldOutState(State):
         self.gumballMachine = gumballMachine
 
     def insertQuarter(self):
-		print("You can't insert a quarter, the machine is sold out")
+        print("You can't insert a quarter, the machine is sold out")
 
     def ejectQuarter(self):
-		print("You can't eject, you haven't inserted a quarter yet")
+        print("You can't eject, you haven't inserted a quarter yet")
 
     def turnCrank(self):
-		print("You turned, but there are no gumballs")
+        print("You turned, but there are no gumballs")
 
     def dispense(self):
-		print("No gumball dispensed")
+        print("No gumball dispensed")
 
     def refill(self):
-		self.gumballMachine.setState(self.gumballMachine.getNoQuarterState())
+        self.gumballMachine.setState(self.gumballMachine.getNoQuarterState())
 
     def __str__(self):
-		return "sold out"
+        return "sold out"
 
 
 class SoldState(State):
@@ -131,31 +131,31 @@ class SoldState(State):
 
 
 class GumballMachine:
-    
+
     def __init__(self, numberGumballs):
          self.count = numberGumballs
-         
+
          self.soldOutState       = SoldOutState(self)
          self.noQuarterState     = NoQuarterState(self)
          self.hasQuarterState    = HasQuarterState(self)
          self.soldState          = SoldState(self)
-         
+
          if (numberGumballs > 0):
              self.state = self.noQuarterState
          else:
              self.state = self.soldOutState
- 
+
     # All operations that are delegated to the States
     def insertQuarter(self):
         self.state.insertQuarter()
-    
+
     def ejectQuarter(self):
         self.state.ejectQuarter()
 
     def turnCrank(self):
         self.state.turnCrank()
         self.state.dispense()
- 
+
     def refill(self, count):
        self.count += count
        print("The gumball machine was just refilled; it's new count is: " + str(self.count))
@@ -165,7 +165,7 @@ class GumballMachine:
         print("A gumball comes rolling out the slot...");
         if (self.count != 0):
             self.count = self.count - 1
-            
+
     # Setter. Not necessary, but helpful if setting requires complex steps.
     def setState(self, state):
        self.state = state
@@ -173,13 +173,13 @@ class GumballMachine:
     # Internal states/properties. Not necessary, but good practice if steps are complex.
     def getCount(self):
         return self.count
-    
+
     def getState(self):
         return self.state
 
     def getSoldOutState(self):
         return self.soldOutState;
-    
+
 
     def getNoQuarterState(self):
         return self.noQuarterState
@@ -189,7 +189,7 @@ class GumballMachine:
 
     def getSoldState(self):
         return self.soldState
- 
+
     # Magic Methods
     def __str__(self):
         s = "\nMighty Gumball, Inc."
