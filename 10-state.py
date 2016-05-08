@@ -55,7 +55,7 @@ class HasQuarterState(State):
     def __str__(self):
        return "waiting for turn of crank"
 
-
+# https://www.youtube.com/watch?v=CGzk2O9QhB8
 class NoQuarterState(State):
     def __init__(self, gumballMachine):
         self.gumballMachine = gumballMachine
