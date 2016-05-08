@@ -193,7 +193,7 @@ class GumballMachine:
     # Magic Methods
     def __str__(self):
         s = "\nMighty Gumball, Inc."
-        s += "\nJava-enabled Standing Gumball Model #2004"
+        s += "\nPython-enabled Standing Gumball Model #2004"
         s += "\nInventory: " + str(self.count) + " gumball"
         if (self.count != 1):
             s += "s"
@@ -201,24 +201,27 @@ class GumballMachine:
         s += "Machine is " + str(self.state) + "\n"
         return s
 
-
-if __name__ == "__main__":
-    gumballMachine = GumballMachine(2)
-
-    print(gumballMachine)
-
-    gumballMachine.insertQuarter()
-    gumballMachine.turnCrank()
-
-    print(gumballMachine)
-
-    gumballMachine.insertQuarter()
-    gumballMachine.turnCrank()
-    gumballMachine.insertQuarter()
-    gumballMachine.turnCrank()
-
-    gumballMachine.refill(5)
-    gumballMachine.insertQuarter()
-    gumballMachine.turnCrank()
-
-    print(gumballMachine)
+# Test classes
+class Test_Gumball():
+	def run(self):
+	    gumballMachine = GumballMachine(2)
+	
+	    print(gumballMachine)
+	
+	    gumballMachine.insertQuarter()
+	    gumballMachine.turnCrank()
+	
+	    print(gumballMachine)
+	
+	    gumballMachine.insertQuarter()
+	    gumballMachine.turnCrank()
+	    gumballMachine.insertQuarter()
+	    gumballMachine.turnCrank()
+	
+	    gumballMachine.refill(5)
+	    gumballMachine.insertQuarter()
+	    gumballMachine.turnCrank()
+	
+	    print(gumballMachine)
+	   
+Test_Gumball().run()
