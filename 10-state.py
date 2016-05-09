@@ -1,15 +1,11 @@
-# -*- coding: utf-8 -*-
 """
 Created on Sun Jun 28 19:47:46 2015
-
 Based on Head First Design Patterns book implementation in Java.
-
-@author: dankow01
 """
 
 class State:
     def __init__(self, gumballMachine):
-        self.gumballMachine = None
+        self.gumballMachine = gumballMachine
 
     def insertQuarter(self):
         pass
@@ -30,11 +26,7 @@ class State:
         pass
 
 
-
 class HasQuarterState(State):
-    def __init__(self, gumballMachine):
-        self.gumballMachine = gumballMachine
-
     def insertQuarter(self):
         print("You can't insert another quarter")
 
@@ -55,11 +47,8 @@ class HasQuarterState(State):
     def __str__(self):
        return "waiting for turn of crank"
 
-# https://www.youtube.com/watch?v=CGzk2O9QhB8
-class NoQuarterState(State):
-    def __init__(self, gumballMachine):
-        self.gumballMachine = gumballMachine
 
+class NoQuarterState(State):
     def insertQuarter(self):
         print("You inserted a quarter")
         self.gumballMachine.setState(self.gumballMachine.getHasQuarterState())
@@ -79,10 +68,8 @@ class NoQuarterState(State):
     def __str__(self):
         return "waiting for quarter"
 
-class SoldOutState(State):
-    def __init__(self, gumballMachine):
-        self.gumballMachine = gumballMachine
 
+class SoldOutState(State):
     def insertQuarter(self):
         print("You can't insert a quarter, the machine is sold out")
 
@@ -103,9 +90,6 @@ class SoldOutState(State):
 
 
 class SoldState(State):
-    def __init__(self, gumballMachine):
-        self.gumballMachine = gumballMachine
-
     def insertQuarter(self):
         print("Please wait, we're already giving you a gumball")
 
@@ -193,7 +177,7 @@ class GumballMachine:
     # Magic Methods
     def __str__(self):
         s = "\nMighty Gumball, Inc."
-        s += "\nPython-enabled Standing Gumball Model #2004"
+        s += "\nJava-enabled Standing Gumball Model #2004"
         s += "\nInventory: " + str(self.count) + " gumball"
         if (self.count != 1):
             s += "s"
@@ -201,27 +185,28 @@ class GumballMachine:
         s += "Machine is " + str(self.state) + "\n"
         return s
 
+
 # Test classes
 class Test_Gumball():
 	def run(self):
 	    gumballMachine = GumballMachine(2)
-	
+
 	    print(gumballMachine)
-	
+
 	    gumballMachine.insertQuarter()
 	    gumballMachine.turnCrank()
-	
+
 	    print(gumballMachine)
-	
+
 	    gumballMachine.insertQuarter()
 	    gumballMachine.turnCrank()
 	    gumballMachine.insertQuarter()
 	    gumballMachine.turnCrank()
-	
+
 	    gumballMachine.refill(5)
 	    gumballMachine.insertQuarter()
 	    gumballMachine.turnCrank()
-	
+
 	    print(gumballMachine)
 	   
 Test_Gumball().run()
