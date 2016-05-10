@@ -12,7 +12,7 @@ class RemoteControl:
         self.stack.append(self.command)
     def undoCommand(self):
         c = self.stack.pop()
-        c.execute()
+        c.undo()
 
         
 class MeowCommand:
@@ -20,17 +20,23 @@ class MeowCommand:
         pass
     def execute(self):  
         print('Meow meow!')
+    def undo(self):  
+        print('Woem woem!')
         
 class BarkCommand:
     def __init__(self):
         pass
     def execute(self):
         print('Bark bark!')
+    def undo(self):  
+        print('Krab krab!')
 
 class NullCommand:
     def __init__(self):
         pass
     def execute(self):
+        pass
+    def undo(self):  
         pass
 
 class Test(unittest.TestCase):
