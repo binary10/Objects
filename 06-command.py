@@ -1,3 +1,6 @@
+import unittest 
+import sys
+
 class RemoteControl:
     def __init__(self):
         self.stack = []
@@ -29,3 +32,26 @@ class NullCommand:
         pass
     def execute(self):
         pass
+
+class Test(unittest.TestCase):
+	def setUp(self):
+		self.r = RemoteControl()
+		self.meow = MeowCommand()
+		self.bark = BarkCommand()
+		self.n	 = NullCommand()
+	
+	def test_commands(self):
+		# Run
+		self.r.setCommand(self.meow)
+		self.r.executeCommand()
+		self.r.setCommand(self.bark)
+		self.r.executeCommand()
+		self.r.setCommand(self.n)
+		self.r.executeCommand()
+		self.r.undoCommand()
+		self.r.undoCommand()
+		self.r.undoCommand()
+
+
+runner = unittest.TextTestRunner(stream=sys.stdout)
+result = runner.run(unittest.makeSuite(Test))
