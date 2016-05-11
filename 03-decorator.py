@@ -1,5 +1,6 @@
 import logging
 import sys
+import unittest
 
 # Create Beverages
 class Beverage():
@@ -42,31 +43,30 @@ class Mocha(CondimentDecorator):
 		return self.beverage.cost() + 0.80
 
 
-# Test Classes
-class Test():
+# Configure Log
+class AppLog:
 	def __init__(self):
-		self.log = logging.getLogger('.'.join([__name__, type(self).__name__]))
+		self.log = logging.getLogger(__name__)
+		h = logging.StreamHandler(sys.stdout)
+		f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+		h.setFormatter(f)
+		self.log.setLevel(logging.DEBUG)
+		self.log.addHandler(h)
 
 
-class Test_Order(Test):
-	def run(self):
+# Define tests
+class Test(unittest.TestCase):
+	def setUp(self):
+		self.log = AppLog().log
 		# Build a new coffee order
-		bev = HouseBlend()
-		bev = Milk(bev)
-		bev = Mocha(bev)
-		
-		# Log the cost
-		self.log.debug(bev.cost())
-		self.log.debug(bev.get_description())
+		self.bev = HouseBlend()
+		self.bev = Milk(self.bev)
+		self.bev = Mocha(self.bev)
+	
+	def test_decorator(self):
+		self.log.debug(self.bev.cost())
+		self.log.debug(self.bev.get_description())
 
-
-
-#Configure Logger
-l = logging.getLogger(__name__)
-h = logging.StreamHandler(sys.stdout)
-f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-h.setFormatter(f)
-l.setLevel(logging.DEBUG)
-l.addHandler(h)
-
-Test_Order().run()
+# Run test suite
+runner = unittest.TextTestRunner(stream=sys.stdout)
+result = runner.run(unittest.makeSuite(Test))
