@@ -205,7 +205,7 @@ class AppLog:
 # Define tests
 class Test(unittest.TestCase):
 	@classmethod
-	def setUpClass(self):
+	def setUpClass(cls):
 		self.log = AppLog().log
 		self.gumballMachine = GumballMachine(2)
 
