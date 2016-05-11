@@ -1,6 +1,8 @@
+import logging
 import unittest 
 import sys
 
+# Create main widget
 class RemoteControl:
     def __init__(self):
         self.stack = []
@@ -14,33 +16,43 @@ class RemoteControl:
         c = self.stack.pop()
         c.undo()
 
-        
-class MeowCommand:
-    def __init__(self):
-        pass
+# Define commands
+class Command:
+	def __init__(self):
+		self.log = logging.getLogger('.'.join([__name__, type(self).__name__]))
+
+class MeowCommand(Command):
     def execute(self):  
-        print('Meow meow!')
+        self.log.debug('Meow meow!')
     def undo(self):  
-        print('Woem woem!')
+        self.log.debug('Woem woem!')
         
-class BarkCommand:
-    def __init__(self):
-        pass
+class BarkCommand(Command):
     def execute(self):
-        print('Bark bark!')
+        self.log.debug('Bark bark!')
     def undo(self):  
-        print('Krab krab!')
+        self.log.debug('Krab krab!')
 
-class NullCommand:
-    def __init__(self):
-        pass
+class NullCommand(Command):
     def execute(self):
         pass
     def undo(self):  
         pass
 
+# Configure Log
+class LogConfig:
+	def __init__(self):
+		l = logging.getLogger(__name__)
+		h = logging.StreamHandler(sys.stdout)
+		f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+		h.setFormatter(f)
+		l.setLevel(logging.DEBUG)
+		l.addHandler(h)
+
+# Define tests
 class Test(unittest.TestCase):
 	def setUp(self):
+		l = LogConfig()
 		self.r = RemoteControl()
 		self.meow = MeowCommand()
 		self.bark = BarkCommand()
@@ -58,6 +70,6 @@ class Test(unittest.TestCase):
 		self.r.undoCommand()
 		self.r.undoCommand()
 
-
+# Run test suite
 runner = unittest.TextTestRunner(stream=sys.stdout)
 result = runner.run(unittest.makeSuite(Test))
