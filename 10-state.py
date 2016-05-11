@@ -204,10 +204,11 @@ class AppLog:
 
 # Define tests
 class Test(unittest.TestCase):
-	def setUp(self):
+	@classmethod
+	def setUpClass(self):
 		self.log = AppLog().log
 		self.gumballMachine = GumballMachine(2)
-	
+
 	def test_gumball_machine(self):
 		self.log.debug(self.gumballMachine)
 	
@@ -217,14 +218,13 @@ class Test(unittest.TestCase):
 		self.gumballMachine.insertQuarter()
 		self.gumballMachine.turnCrank()
 		self.log.debug(self.gumballMachine)
-		
+
 	def test_refill(self):
 		self.gumballMachine.refill(5)
 		self.gumballMachine.insertQuarter()
 		self.gumballMachine.turnCrank()
-		self.log.debug(self.gumballMachine)
-		
-		
+		self.log.debug(self.gumballMachine)		
+
 # Run test suite
 runner = unittest.TextTestRunner(stream=sys.stdout)
 result = runner.run(unittest.makeSuite(Test))
