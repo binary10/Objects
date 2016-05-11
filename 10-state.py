@@ -209,7 +209,6 @@ class Test(unittest.TestCase):
 		self.gumballMachine = GumballMachine(2)
 	
 	def test_gumball_machine(self):
-		self.log.debug(
 		self.log.debug(self.gumballMachine)
 	
 	def test_basic_purchase(self):
