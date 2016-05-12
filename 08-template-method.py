@@ -48,20 +48,20 @@ class Tea(CaffeineBeverage):
 # Configure Log
 class AppLog:
 	def __init__(self):
-		l = logging.getLogger(__name__)
+		self.log = logging.getLogger(__name__)
 		h = logging.StreamHandler(sys.stdout)
 		f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 		h.setFormatter(f)
-		l.setLevel(logging.DEBUG)
-		l.addHandler(h)
+		self.log.setLevel(logging.DEBUG)
+		self.log.addHandler(h)
 
 # Define tests
 class Test(unittest.TestCase):
 	@classmethod
 	def setUpClass(cls):
-		self.log = AppLog()
-		self.tea = Tea()
-		self.coffee = Coffee()
+		cls.log = AppLog().log
+		cls.tea = Tea()
+		cls.coffee = Coffee()
 	
 	def test_templates(self):
         # Run
