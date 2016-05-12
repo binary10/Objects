@@ -62,8 +62,8 @@ class Test(unittest.TestCase):
 		
 		# Build a new coffee order
 		cls.bev = HouseBlend()
-		cls.bev = Milk(self.bev)
-		cls.bev = Mocha(self.bev)
+		cls.bev = Milk(cls.bev)
+		cls.bev = Mocha(cls.bev)
 	
 	def test_decorator(self):
 		self.log.debug(self.bev.cost())
