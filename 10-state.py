@@ -1,3 +1,4 @@
+
 """
 Created on Sun Jun 28 19:47:46 2015
 Based on Head First Design Patterns book implementation in Java.
@@ -206,8 +207,8 @@ class AppLog:
 class Test(unittest.TestCase):
 	@classmethod
 	def setUpClass(cls):
-		self.log = AppLog().log
-		self.gumballMachine = GumballMachine(2)
+		cls.log = AppLog().log
+		cls.gumballMachine = GumballMachine(2)
 
 	def test_gumball_machine(self):
 		self.log.debug(self.gumballMachine)
@@ -228,4 +229,3 @@ class Test(unittest.TestCase):
 # Run test suite
 runner = unittest.TextTestRunner(stream=sys.stdout)
 result = runner.run(unittest.makeSuite(Test))
-
