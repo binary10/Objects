@@ -56,8 +56,10 @@ class AppLog:
 
 # Define tests
 class Test(unittest.TestCase):
-	def setUp(self):
+	@classmethod
+	def setUpClass(cls):
 		self.log = AppLog().log
+		
 		# Build a new coffee order
 		self.bev = HouseBlend()
 		self.bev = Milk(self.bev)
