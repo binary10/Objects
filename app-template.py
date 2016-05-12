@@ -18,7 +18,7 @@ class Test(unittest.TestCase):
 	def test_case_01(self):
 	  pass
 	
-  def test_case_02(self):
+	def test_case_02(self):
 	  pass
 
 
