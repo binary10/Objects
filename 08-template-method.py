@@ -46,7 +46,7 @@ class Tea(CaffeineBeverage):
         self.log.debug('Adding lemon and honey')
 
 # Configure Log
-class LogConfig:
+class AppLog:
 	def __init__(self):
 		l = logging.getLogger(__name__)
 		h = logging.StreamHandler(sys.stdout)
@@ -57,8 +57,9 @@ class LogConfig:
 
 # Define tests
 class Test(unittest.TestCase):
-	def setUp(self):
-		l = LogConfig()
+	@classmethod
+	def setUpClass(cls):
+		self.log = AppLog()
 		self.tea = Tea()
 		self.coffee = Coffee()
 	
