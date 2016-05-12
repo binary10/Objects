@@ -64,7 +64,6 @@ class Test(unittest.TestCase):
 		cls.coffee = Coffee()
 	
 	def test_templates(self):
-        # Run
 		self.tea.prepareRecipe()
 		self.coffee.prepareRecipe()
 
