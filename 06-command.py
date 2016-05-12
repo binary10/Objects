@@ -40,7 +40,7 @@ class NullCommand(Command):
         pass
 
 # Configure Log
-class LogConfig:
+class AppLog:
 	def __init__(self):
 		l = logging.getLogger(__name__)
 		h = logging.StreamHandler(sys.stdout)
@@ -51,8 +51,9 @@ class LogConfig:
 
 # Define tests
 class Test(unittest.TestCase):
-	def setUp(self):
-		l = LogConfig()
+	@classmethod
+	def setUpClass(self):
+		self.log = AppLog()
 		self.r = RemoteControl()
 		self.meow = MeowCommand()
 		self.bark = BarkCommand()
