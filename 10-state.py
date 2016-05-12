@@ -1,11 +1,17 @@
+
 """
 Created on Sun Jun 28 19:47:46 2015
 Based on Head First Design Patterns book implementation in Java.
 """
+import logging
+import unittest 
+import sys 
 
 class State:
     def __init__(self, gumballMachine):
         self.gumballMachine = gumballMachine
+        self.log = logging.getLogger('.'.join([__name__, type(self).__name__]))
+
 
     def insertQuarter(self):
         pass
@@ -28,18 +34,18 @@ class State:
 
 class HasQuarterState(State):
     def insertQuarter(self):
-        print("You can't insert another quarter")
+        self.log.debug("You can't insert another quarter")
 
     def ejectQuarter(self):
-        print("Quarter returned")
+        self.log.debug("Quarter returned")
         self.gumballMachine.setState(self.gumballMachine.getNoQuarterState())
 
     def turnCrank(self):
-        print("You turned...")
+        self.log.debug("You turned...")
         self.gumballMachine.setState(self.gumballMachine.getSoldState())
 
     def dispense(self):
-        print("No gumball dispensed")
+        self.log.debug("No gumball dispensed")
 
     def refill(self):
         pass
@@ -50,17 +56,17 @@ class HasQuarterState(State):
 
 class NoQuarterState(State):
     def insertQuarter(self):
-        print("You inserted a quarter")
+        self.log.debug("You inserted a quarter")
         self.gumballMachine.setState(self.gumballMachine.getHasQuarterState())
 
     def ejectQuarter(self):
-        print("You haven't inserted a quarter")
+        self.log.debug("You haven't inserted a quarter")
 
     def turnCrank(self):
-        print("You turned, but there's no quarter")
+        self.log.debug("You turned, but there's no quarter")
 
     def dispense(self):
-        print("You need to pay first")
+        self.log.debug("You need to pay first")
 
     def refill(self):
         pass
@@ -71,16 +77,16 @@ class NoQuarterState(State):
 
 class SoldOutState(State):
     def insertQuarter(self):
-        print("You can't insert a quarter, the machine is sold out")
+        self.log.debug("You can't insert a quarter, the machine is sold out")
 
     def ejectQuarter(self):
-        print("You can't eject, you haven't inserted a quarter yet")
+        self.log.debug("You can't eject, you haven't inserted a quarter yet")
 
     def turnCrank(self):
-        print("You turned, but there are no gumballs")
+        self.log.debug("You turned, but there are no gumballs")
 
     def dispense(self):
-        print("No gumball dispensed")
+        self.log.debug("No gumball dispensed")
 
     def refill(self):
         self.gumballMachine.setState(self.gumballMachine.getNoQuarterState())
@@ -91,20 +97,20 @@ class SoldOutState(State):
 
 class SoldState(State):
     def insertQuarter(self):
-        print("Please wait, we're already giving you a gumball")
+        self.log.debug("Please wait, we're already giving you a gumball")
 
     def ejectQuarter(self):
-        print("Sorry, you already turned the crank")
+        self.log.debug("Sorry, you already turned the crank")
 
     def turnCrank(self):
-        print("Turning twice doesn't get you another gumball!")
+        self.log.debug("Turning twice doesn't get you another gumball!")
 
     def dispense(self):
         self.gumballMachine.releaseBall()
         if (self.gumballMachine.getCount() > 0):
             self.gumballMachine.setState(self.gumballMachine.getNoQuarterState())
         else:
-            print("Oops, out of gumballs!")
+            self.log.debug("Oops, out of gumballs!")
             self.gumballMachine.setState(self.gumballMachine.getSoldOutState())
 
     def refill(self):
@@ -117,16 +123,18 @@ class SoldState(State):
 class GumballMachine:
 
     def __init__(self, numberGumballs):
-         self.count = numberGumballs
+        self.log = logging.getLogger('.'.join([__name__, type(self).__name__]))
+        self.count = numberGumballs
+	
 
-         self.soldOutState       = SoldOutState(self)
-         self.noQuarterState     = NoQuarterState(self)
-         self.hasQuarterState    = HasQuarterState(self)
-         self.soldState          = SoldState(self)
+        self.soldOutState       = SoldOutState(self)
+        self.noQuarterState     = NoQuarterState(self)
+        self.hasQuarterState    = HasQuarterState(self)
+        self.soldState          = SoldState(self)
 
-         if (numberGumballs > 0):
-             self.state = self.noQuarterState
-         else:
+        if (numberGumballs > 0):
+            self.state = self.noQuarterState
+        else:
              self.state = self.soldOutState
 
     # All operations that are delegated to the States
@@ -142,11 +150,11 @@ class GumballMachine:
 
     def refill(self, count):
        self.count += count
-       print("The gumball machine was just refilled; it's new count is: " + str(self.count))
+       self.log.debug("The gumball machine was just refilled; it's new count is: " + str(self.count))
        self.state.refill()
 
     def releaseBall(self):
-        print("A gumball comes rolling out the slot...");
+        self.log.debug("A gumball comes rolling out the slot...");
         if (self.count != 0):
             self.count = self.count - 1
 
@@ -185,28 +193,39 @@ class GumballMachine:
         s += "Machine is " + str(self.state) + "\n"
         return s
 
+# Configure Log
+class AppLog:
+	def __init__(self):
+		self.log = logging.getLogger(__name__)
+		h = logging.StreamHandler(sys.stdout)
+		f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+		h.setFormatter(f)
+		self.log.setLevel(logging.DEBUG)
+		self.log.addHandler(h)
 
-# Test classes
-class Test_Gumball():
-	def run(self):
-	    gumballMachine = GumballMachine(2)
+# Define tests
+class Test(unittest.TestCase):
+	@classmethod
+	def setUpClass(cls):
+		cls.log = AppLog().log
+		cls.gumballMachine = GumballMachine(2)
 
-	    print(gumballMachine)
+	def test_gumball_machine(self):
+		self.log.debug(self.gumballMachine)
+	
+	def test_basic_purchase(self):
+		self.gumballMachine.insertQuarter()
+		self.gumballMachine.turnCrank()
+		self.gumballMachine.insertQuarter()
+		self.gumballMachine.turnCrank()
+		self.log.debug(self.gumballMachine)
 
-	    gumballMachine.insertQuarter()
-	    gumballMachine.turnCrank()
+	def test_refill(self):
+		self.gumballMachine.refill(5)
+		self.gumballMachine.insertQuarter()
+		self.gumballMachine.turnCrank()
+		self.log.debug(self.gumballMachine)		
 
-	    print(gumballMachine)
-
-	    gumballMachine.insertQuarter()
-	    gumballMachine.turnCrank()
-	    gumballMachine.insertQuarter()
-	    gumballMachine.turnCrank()
-
-	    gumballMachine.refill(5)
-	    gumballMachine.insertQuarter()
-	    gumballMachine.turnCrank()
-
-	    print(gumballMachine)
-	   
-Test_Gumball().run()
+# Run test suite
+runner = unittest.TextTestRunner(stream=sys.stdout)
+result = runner.run(unittest.makeSuite(Test))

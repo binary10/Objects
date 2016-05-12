@@ -40,23 +40,24 @@ class NullCommand(Command):
         pass
 
 # Configure Log
-class LogConfig:
+class AppLog:
 	def __init__(self):
-		l = logging.getLogger(__name__)
+		self.log = logging.getLogger(__name__)
 		h = logging.StreamHandler(sys.stdout)
 		f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 		h.setFormatter(f)
-		l.setLevel(logging.DEBUG)
-		l.addHandler(h)
+		self.log.setLevel(logging.DEBUG)
+		self.log.addHandler(h)
 
 # Define tests
 class Test(unittest.TestCase):
-	def setUp(self):
-		l = LogConfig()
-		self.r = RemoteControl()
-		self.meow = MeowCommand()
-		self.bark = BarkCommand()
-		self.n	 = NullCommand()
+	@classmethod
+	def setUpClass(cls):
+		cls.log  = AppLog().log
+		cls.r 	 = RemoteControl()
+		cls.meow = MeowCommand()
+		cls.bark = BarkCommand()
+		cls.n	 = NullCommand()
 	
 	def test_commands(self):
 		# Run
