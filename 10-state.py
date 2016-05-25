@@ -195,13 +195,24 @@ class GumballMachine:
 
 # Configure Log
 class AppLog:
-	def __init__(self):
-		self.log = logging.getLogger(__name__)
-		h = logging.StreamHandler(sys.stdout)
-		f = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-		h.setFormatter(f)
-		self.log.setLevel(logging.DEBUG)
-		self.log.addHandler(h)
+    class __AppLog:
+        def __init__(self):
+            self.log = logging.getLogger(__name__)
+            h = logging.StreamHandler(sys.stdout)
+            f = logging.Formatter('%(asctime)s - %(name)s - %(funcName)s - %(levelname)s - %(message)s')
+            h.setFormatter(f)
+            self.log.setLevel(logging.DEBUG)
+            self.log.addHandler(h)
+    
+    instance = None
+    
+    def __init__(self):
+        if not AppLog.instance:
+            AppLog.instance = self.__AppLog()
+
+            
+    def __getattr__(self, attr):
+        return getattr(self.instance, attr)
 
 # Define tests
 class Test(unittest.TestCase):
