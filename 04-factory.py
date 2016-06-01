@@ -1,3 +1,12 @@
+""" Notes
+
+* No variable should hold a reference to a concrete class.
+* No class should derive from a concrete class.
+* No method should override an implemented method of any
+of its base classes.
+"""
+
+
 import unittest
 import logging
 import sys
@@ -6,9 +15,8 @@ class LogObject:
     def __init__(self):
         self.log = logging.getLogger('.'.join([__name__, type(self).__name__]))
 
-######################################
-# Duck Objects for No Pattern
-######################################
+""" Duck Objects for No Pattern
+"""
 class MallardDuck(LogObject):
     def quack(self):
         self.log.info('Honk honk!')
@@ -53,21 +61,17 @@ class SimplePizzaFactory(LogObject):
 # Concrete pizza classes
 class CheesePizza():
     pass
-
 class PepperoniPizza():
     pass
-
 class ClamPizza():
     pass
-
 class VeggiePizza():
     pass
 
 
 
-######################################
-# Pizza Factory Method
-######################################
+"""  Pizza Factory Method
+"""
 class PizzaStore(LogObject):
     def order_pizza(self, pizza_type):
         pizza = self.create_pizza(pizza_type)
@@ -87,33 +91,136 @@ class PizzaStore(LogObject):
 class NYPizzaStore(PizzaStore):
     def create_pizza(self):
         pass
-
 class ChicagoPizzaStore(PizzaStore):
     def create_pizza(self):
         pass
-        
 class WashingtonPizzaStore(PizzaStore):
     def create_pizza(self):
         pass    
-        
+
 # NY Style
 class NYStyleCheesePizza(Pizza):
+    pass
 class NYStylePepperoniPizza(Pizza):
+    pass
 class NYStyleClamPizza(Pizza):
+    pass
 class NYStyleVeggiePizza(Pizza):
+    pass
 
 # Chicago Style
 class ChicagoStyleCheesePizza(Pizza):
+    pass
 class ChicagoStylePepperoniPizza(Pizza):
+    pass
 class ChicagoStyleClamPizza(Pizza):
+    pass
 class ChicagoStyleVeggiePizza(Pizza):
+    pass
 
 # Washington Style
 class WashingtonStyleCheesePizza(Pizza):
+    pass
 class WashingtonStylePepperoniPizza(Pizza):
+    pass
 class WashingtonStyleClamPizza(Pizza):
+    pass
 class WashingtonStyleVeggiePizza(Pizza):
+    pass
+
+
+""" Abstract Factory
+"""
+
+class PizzaIngredientFactory(LogObject):
+    def create_sauce(self):
+        pass
+    def create_dough(self):
+        pass
+    def create_cheese(self):
+        pass
+    def create_veggies(self):
+        pass
+    def create_pepperoni(self):
+        pass
+    def create_clams(self):
+        pass
+
         
+class NYPizzaIngredientFactory(PizzaIngredientFactory):
+    def create_sauce(self):
+        return MarinaraSauce()
+    def create_dough(self):
+        return ThinCrustDough()
+    def create_cheese(self):
+        return ReggianoCheese()
+    def create_veggies(self):
+        return [Garlic(), Onion(), Mushroom(), RedPepper()]
+    def create_pepperoni(self):
+        return SlicedPepperoni()
+    def create_clams(self):
+        return FreshClams()
+
+
+class NYPizzaIngredientFactory(PizzaIngredientFactory):
+    def create_sauce(self):
+        return PlumTomatoSauce()
+    def create_dough(self):
+        return ThickCrustDough()
+    def create_cheese(self):
+        return MozzarellaCheese()
+    def create_veggies(self):
+        return [Garlic(), Onion(), Mushroom(), RedPepper()]
+    def create_pepperoni(self):
+        return SlicedPepperoni()
+    def create_clams(self):
+        return FreshClams()
+
+
+# Ingredient Families
+# NY
+class FreshClams:
+    pass
+class MarinaraSauce:
+    pass
+class ThinCrustDough:
+    pass
+class ReggianoCheese:
+    pass
+
+# Chicago
+class FrozenClams:
+    pass
+class PlumTomatoSauce:
+    pass
+class ThickCrustDough:
+    pass
+class MozzarellaCheese:
+    pass
+
+# California
+class Calimari:
+    pass
+class BruschettaSauce:
+    pass
+class VeryThinCrust:
+    pass
+class GoatCheese:
+    pass
+
+    
+# Shared
+class SlicedPepperoni:
+    pass
+class Garlic:
+    pass
+class Onion:
+    pass
+class Mushroom:
+    pass
+class RedPepper:
+    pass
+    
 ######################################
 # Pizza
 ######################################
