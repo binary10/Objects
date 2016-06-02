@@ -38,7 +38,7 @@ class RubberDuck(LogObject):
 What if we want to create NY and Chicago
 style pizza? One way is to make a new version
 of the SimplePizzaFactory and compose the store
-with them. 
+with them.
 
 """
 
@@ -54,7 +54,7 @@ class SimplePizzaFactory(LogObject):
             pizza = ClamPizza()
         elif type == 'veggie':
             pizza = VeggiePizza()
-        
+
         return pizza
 
 
@@ -75,32 +75,78 @@ class VeggiePizza():
 class PizzaStore(LogObject):
     def order_pizza(self, pizza_type):
         pizza = self.create_pizza(pizza_type)
-        
-        # Tell the pizza to create itself 
+
+        # Tell the pizza to create itself
         # (Then stop talking to your pizza)
         pizza.prepare()
         pizza.bake()
         pizza.cut()
         pizza.box()
-        
+
     # Abstract. Subclasses will implement.
     def create_pizza(self, pizza_type):
-        return object()
+        pass
 
 
 class NYPizzaStore(PizzaStore):
-    def create_pizza(self):
-        pass
+    def create_pizza(self, pizza_type):
+        pizza = object()
+        ingredient_factory = NYPizzaIngredientFactory()
+        if pizza_type == 'cheese':
+            pizza = NYStyleCheesePizza(ingredient_factory)
+        elif pizza_type == 'pepperoni':
+            pizza = NYStylePepperoniPizza(ingredient_factory)
+        elif pizza_type == 'clam':
+            pizza = NYStylePepperoniPizza(ingredient_factory)
+        elif pizza_type == 'veggie':
+            pizza = NYStylePepperoniPizza(ingredient_factory)
+        return pizza
+
 class ChicagoPizzaStore(PizzaStore):
-    def create_pizza(self):
-        pass
+    def create_pizza(self, pizza_type):
+        pizza = object()
+        ingredient_factory = ChicagoPizzaIngredientFactory()
+        if pizza_type == 'cheese':
+            pizza = ChicagoStyleCheesePizza(ingredient_factory)
+        elif pizza_type == 'pepperoni':
+            pizza = ChicagoStylePepperoniPizza(ingredient_factory)
+        elif pizza_type == 'clam':
+            pizza = ChicagoStyleClamPizza(ingredient_factory)
+        elif pizza_type == 'veggie':
+            pizza = ChicagoStyleVeggiePizza(ingredient_factory)
+        return pizza
+
 class WashingtonPizzaStore(PizzaStore):
     def create_pizza(self):
-        pass    
+        pass
+
+
+
+""" Pizza
+"""
+class Pizza(LogObject):
+    # name,    dough,    sauce,    cheese,    veggies,    pepperoni,    clams
+    def prepare(self):
+        pass # Abstract
+    def bake(self):
+        self.log.debug('Bake for 25 minutes at 400')
+    def cut(self):
+        self.log.debug('Cutting the pizza into diagonal slices')
+    def box(self):
+        self.log.debug('Place pizza in official PizzaStore box')
+
 
 # NY Style
 class NYStyleCheesePizza(Pizza):
-    pass
+    def __init__(self, ingredient_factory):
+        super().__init__()
+        self.ingredient_factory = ingredient_factory
+    def prepare(self):
+        self.log.debug('Preparing')
+        self.dough = self.ingredient_factory.create_dough()
+        self.sauce = self.ingredient_factory.create_sauce()
+        self.cheese = self.ingredient_factory.create_cheese()
+
 class NYStylePepperoniPizza(Pizza):
     pass
 class NYStyleClamPizza(Pizza):
@@ -110,7 +156,15 @@ class NYStyleVeggiePizza(Pizza):
 
 # Chicago Style
 class ChicagoStyleCheesePizza(Pizza):
-    pass
+    def __init__(self, ingredient_factory):
+        super().__init__()
+        self.ingredient_factory = ingredient_factory
+    def prepare(self):
+        self.log.debug('Preparing')
+        self.dough = self.ingredient_factory.create_dough()
+        self.sauce = self.ingredient_factory.create_sauce()
+        self.cheese = self.ingredient_factory.create_cheese()
+
 class ChicagoStylePepperoniPizza(Pizza):
     pass
 class ChicagoStyleClamPizza(Pizza):
@@ -127,6 +181,7 @@ class WashingtonStyleClamPizza(Pizza):
     pass
 class WashingtonStyleVeggiePizza(Pizza):
     pass
+
 
 
 """ Abstract Factory
@@ -146,7 +201,7 @@ class PizzaIngredientFactory(LogObject):
     def create_clams(self):
         pass
 
-        
+
 class NYPizzaIngredientFactory(PizzaIngredientFactory):
     def create_sauce(self):
         return MarinaraSauce()
@@ -162,7 +217,7 @@ class NYPizzaIngredientFactory(PizzaIngredientFactory):
         return FreshClams()
 
 
-class NYPizzaIngredientFactory(PizzaIngredientFactory):
+class ChicagoPizzaIngredientFactory(PizzaIngredientFactory):
     def create_sauce(self):
         return PlumTomatoSauce()
     def create_dough(self):
@@ -208,7 +263,7 @@ class VeryThinCrust:
 class GoatCheese:
     pass
 
-    
+
 # Shared
 class SlicedPepperoni:
     pass
@@ -220,29 +275,8 @@ class Mushroom:
     pass
 class RedPepper:
     pass
-    
-######################################
-# Pizza
-######################################
-class Pizza(LogObject):
-    """
-    name
-    dough
-    sauce
-    toppings = []
-    """
-    
-    def prepare(self):
-        pass
-    def bake(self):
-        pass
-    def cut(self):
-        pass
-    def box(self):
-        pass
-    def getName(self):
-        return name
- 
+
+
 
 # Configure Log
 class AppLog:
@@ -287,6 +321,10 @@ class Test(unittest.TestCase):
         self.log.debug(d)
         self.log.debug(type(duck))
 
+    def test_chicago_pizza_store(self):
+        store = ChicagoPizzaStore()
+        store.order_pizza('cheese')
+
     def test_simple_factory(self):
         s = SimplePizzaFactory()
         pizza = s.create_pizza('cheese')
@@ -294,6 +332,7 @@ class Test(unittest.TestCase):
 
     def test_case_02(self):
         pass
+
 
 # Run test suite
 runner = unittest.TextTestRunner(stream=sys.stdout)
