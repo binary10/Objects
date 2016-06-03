@@ -7,11 +7,14 @@ import logging
 import unittest 
 import sys 
 
-class State:
-    def __init__(self, gumballMachine):
-        self.gumballMachine = gumballMachine
+class LogObject:
+    def __init__(self):
         self.log = logging.getLogger('.'.join([__name__, type(self).__name__]))
 
+class State(LogObject):
+    def __init__(self, gumballMachine):
+        super().__init__()
+        self.gumballMachine = gumballMachine
 
     def insertQuarter(self):
         pass
@@ -120,10 +123,10 @@ class SoldState(State):
         return "dispensing a gumball"
 
 
-class GumballMachine:
+class GumballMachine(LogObject):
 
     def __init__(self, numberGumballs):
-        self.log = logging.getLogger('.'.join([__name__, type(self).__name__]))
+        super().__init__()
         self.count = numberGumballs
 	
 
