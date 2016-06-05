@@ -3,6 +3,11 @@ Makes an interface simpler
 
 Created: 10:01 PM Wednesday, June 01, 2016
 """
+import unittest
+import logging
+import sys
+
+
 class LogObject:
     def __init__(self):
         self.log = logging.getLogger('.'.join([__name__, type(self).__name__]))
@@ -17,6 +22,7 @@ class HomeTheaterFacade(LogObject):
                 screen,
                 theaterlights,
                 popcornpopper):
+        super().__init__()
         self.amp            = amp
         self.tuner          = tuner
         self.dvdplayer      = dvdplayer
@@ -37,12 +43,15 @@ class HomeTheaterFacade(LogObject):
 
 # Complex system
 class Amplifier(LogObject):
-    def __init__(self):
+    def __init__(self, tuner, dvdplayer, cdplayer):
         super().__init__()
-        self.tuner = Tuner(self)
-        self.dvdplayer = DVDPlayer(self)
-        self.cdplayer = CDPLayer(self)
-
+        self.tuner      = tuner
+        tuner.amp = self
+        self.dvdplayer  = dvdplayer
+        dvdplayer.amp = self
+        self.cdplayer   = cdplayer
+        cdplayer.amp = self
+        
     def on(self):                   self.log.info('')
     def off(self):                  self.log.info('')
     def set_cd(self):               self.log.info('')
@@ -53,10 +62,6 @@ class Amplifier(LogObject):
 
 
 class Tuner(LogObject):
-    def __init__(self, amplifier = None):
-        super().__init__()
-        self.amplifier = amplifier
-
     def on(self):                   self.log.info('')
     def off(self):                  self.log.info('')
     def set_am(self):               self.log.info('')
@@ -65,10 +70,6 @@ class Tuner(LogObject):
 
 
 class DVDPlayer(LogObject):
-    def __init__(self, amplifier = None):
-        super().__init__()
-        self.amplifier = amplifier
-
     def on(self):                       self.log.info('')
     def off(self):                      self.log.info('')
     def eject(self):                    self.log.info('')
@@ -80,10 +81,6 @@ class DVDPlayer(LogObject):
 
 
 class CDPLayer(LogObject):
-    def __init__(self, amplifier = None):
-        super().__init__()
-        self.amplifier = amplifier
-
     def on(self):       self.log.info('')
     def off(self):      self.log.info('')
     def eject(self):    self.log.info('')
@@ -150,15 +147,23 @@ class Test(unittest.TestCase):
         cls.log = AppLog().log
 
     def test_case_01(self):
-            component = Tuner()
-            component = DVDPlayer()
-            component = CDPLayer()
-            component = Amplifier()
-            component = Screen()
-            component = PopcornPopper()
-            component = TheaterLights()
-            component = Projector()
-        
+            tuner           = Tuner()
+            dvdplayer       = DVDPlayer()
+            cdplayer        = CDPLayer()
+            amplifier       = Amplifier(tuner, dvdplayer, cdplayer)
+            screen          = Screen()
+            popcornpopper   = PopcornPopper()
+            theaterlights   = TheaterLights()
+            projector       = Projector()
+            h = HomeTheaterFacade(tuner         
+                              ,dvdplayer     
+                              ,cdplayer      
+                              ,amplifier     
+                              ,screen        
+                              ,popcornpopper 
+                              ,theaterlights 
+                              ,projector)    
+            
 
     def test_case_02(self):
         self.log.info('')          
