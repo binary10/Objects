@@ -1,10 +1,9 @@
 """ Observer
-Loose coupling is powerful.
+Loose coupling is powerful. Strive for loosely coupled objects that interact.
 Many changes can take place with no adverse consequences.
 * The only thing a subject knows is about a shared interface
 * Observers can be added at any time during runtime
 * New types of observers can be added without changes to the subject
-*
 """
 
 class LogObject:
