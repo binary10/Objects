@@ -16,7 +16,7 @@
 * Classes should be open for extension but closed for modification.
 * Depend on abstractions. Do not depend on concrete classes.
 * Only talk to your friends.
-* Don’t call us, we’ll call you.
+* Donâ€™t call us, weâ€™ll call you.
 * A class should have only one reason to change.
 * Return and pass around objects (of a generic type), not raw data
 * Use a push model rather than a pull model -- push info to delegate so it can do its work
@@ -49,7 +49,7 @@
 
 ## Structural
 * Adapter
-* Façade
+* FaÃ§ade
 * Decorator
 * Composite
 * (Flyweight)
@@ -79,7 +79,8 @@
 * Adding a malicious method -- the only solution is encapsulation
 * 80% of code base should be written in terms of interfaces
 * Patterns are discovered not invented
-* A pattern is a general technique -- not a specific solutionA piece of code demonstrating the pattern is not the pattern itself.
+* A pattern is a general technique -- not a specific solution
+* A piece of code demonstrating the pattern is not the pattern itself.
 * Classes and objects can participate in multiple patterns simultaneously
 * Patterns can look the same but differ in dynamic behavior
 * Reify -- to make real. A pattern is reified by a design, not an instance
